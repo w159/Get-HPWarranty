@@ -1,32 +1,3 @@
-Skip to content
-Search or jump to…
-Pull requests
-Issues
-Marketplace
-Explore
- 
-@w159 
-w159
-/
-PowerShell-Warranty
-Public
-Code
-Issues
-Pull requests
-Actions
-Projects
-Wiki
-Security
-Insights
-Settings
-PowerShell-Warranty/Get-HPWarranty
-@w159
-w159 Update Get-HPWarranty
-Latest commit 7a56178 27 days ago
- History
- 1 contributor
-35 lines (31 sloc)  1.18 KB
-
 function Get-HPWarranty([Parameter(Mandatory = $true)]$SourceDevice, $Client) {
     try { 
         $HPReq = Invoke-RestMethod -Uri "https://warrantyapiproxy.azurewebsites.net/api/HP?serial=$($SourceDevice)"
