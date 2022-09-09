@@ -1,0 +1,79 @@
+Skip to content
+Search or jump to…
+Pull requests
+Issues
+Marketplace
+Explore
+ 
+@w159 
+w159
+/
+PowerShell-Warranty
+Public
+Code
+Issues
+Pull requests
+Actions
+Projects
+Wiki
+Security
+Insights
+Settings
+PowerShell-Warranty/Get-HPWarranty
+@w159
+w159 Update Get-HPWarranty
+Latest commit 7a56178 27 days ago
+ History
+ 1 contributor
+35 lines (31 sloc)  1.18 KB
+
+function Get-HPWarranty([Parameter(Mandatory = $true)]$SourceDevice, $Client) {
+    try { 
+        $HPReq = Invoke-RestMethod -Uri "https://warrantyapiproxy.azurewebsites.net/api/HP?serial=$($SourceDevice)"
+    }
+    catch {
+        $HPReq = $null
+    }
+
+
+    if ($HPreq) {
+        $today = Get-Date
+        $WarrantyState = if ([DateTime]$HPReq.endDate -le $today) { "Expired" } else { "OK" }
+        $WarObj = [PSCustomObject]@{
+            'Serial'                = $SourceDevice
+            'Warranty Product name' = $hpreq.warProduct
+            'StartDate'             = [DateTime]$HPReq.StartDate
+            'EndDate'               = [DateTime]$HPReq.endDate
+            'Warranty Status'       = $WarrantyState
+            'Client'                = $Client
+        }
+    }
+    else {
+        $WarObj = [PSCustomObject]@{
+            'Serial'                = $SourceDevice
+            'Warranty Product name' = 'Could not get warranty information'
+            'StartDate'             = $null
+            'EndDate'               = $null
+            'Warranty Status'       = 'Could not get warranty information'
+            'Client'                = $Client
+        }
+    }
+    return $WarObj
+}
+
+
+Footer
+© 2022 GitHub, Inc.
+Footer navigation
+Terms
+Privacy
+Security
+Status
+Docs
+Contact GitHub
+Pricing
+API
+Training
+Blog
+About
+You have no unread notifications
